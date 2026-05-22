@@ -1,0 +1,58 @@
+server:
+  port: ${SERVER_PORT:15888}
+
+spring:
+  application:
+    name: ai-chat
+  thymeleaf:
+    cache: false
+  config:
+    import: optional:classpath:application-local.yml
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 100MB
+
+chat:
+  upload:
+    max-text-length: 50000
+    allowed-extensions: pdf,doc,docx,txt,md,csv,json,png,jpg,jpeg,gif,webp,bmp
+
+llm:
+  providers:
+    deepseek:
+      name: DeepSeek
+      base-url: https://api.deepseek.com
+      api-key: ${DEEPSEEK_API_KEY:}
+      default-model: deepseek-v4-pro
+      models:
+        - id: deepseek-v4-pro
+          label: DeepSeek V4 Pro
+        - id: deepseek-v4-flash
+          label: DeepSeek V4 Flash
+        - id: deepseek-chat
+          label: DeepSeek Chat (兼容)
+    openai:
+      name: OpenAI
+      base-url: https://api.openai.com/v1
+      api-key: ${OPENAI_API_KEY:}
+      default-model: gpt-4o
+      models:
+        - id: gpt-4o
+          label: GPT-4o
+        - id: gpt-4o-mini
+          label: GPT-4o Mini
+        - id: gpt-4.1
+          label: GPT-4.1
+    qwen:
+      name: 通义千问
+      base-url: https://dashscope.aliyuncs.com/compatible-mode/v1
+      api-key: ${QWEN_API_KEY:}
+      default-model: qwen-plus
+      models:
+        - id: qwen-max
+          label: Qwen Max
+        - id: qwen-plus
+          label: Qwen Plus
+        - id: qwen-turbo
+          label: Qwen Turbo

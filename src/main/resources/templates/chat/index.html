@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 对话助手</title>
+    <link rel="stylesheet" th:href="@{/css/chat.css}">
+</head>
+<body>
+<div class="app">
+    <aside class="sidebar">
+        <div class="brand">
+            <h1>AI Chat</h1>
+            <p>多模型对话平台</p>
+        </div>
+
+        <div class="panel">
+            <label for="providerSelect">模型提供商</label>
+            <select id="providerSelect">
+                <option th:each="p : ${providers}"
+                        th:value="${p.id}"
+                        th:text="${p.name}"
+                        th:selected="${p.id == defaultProvider}"></option>
+            </select>
+        </div>
+
+        <div class="panel">
+            <label for="modelSelect">模型</label>
+            <select id="modelSelect"></select>
+        </div>
+
+        <div class="panel">
+            <label for="systemPrompt">系统提示词</label>
+            <textarea id="systemPrompt" rows="4">你是一个有帮助的 AI 助手，请用简洁清晰的中文回答。</textarea>
+        </div>
+
+        <div class="panel panel-check" id="thinkingPanel">
+            <label class="check-row">
+                <input type="checkbox" id="thinkingEnabled">
+                <span>开启思考模式</span>
+            </label>
+            <p class="panel-hint">仅 DeepSeek V4 支持，开启后会展示可折叠的思考过程</p>
+        </div>
+
+        <button type="button" id="clearBtn" class="secondary-btn">清空对话</button>
+    </aside>
+
+    <main class="chat-main">
+        <header class="chat-header">
+            <div>
+                <h2 id="currentModelTitle">DeepSeek V4 Pro</h2>
+                <span class="status" id="statusText">就绪</span>
+            </div>
+        </header>
+
+        <section class="messages" id="messages">
+            <div class="message assistant welcome">
+                <div class="avatar">AI</div>
+                <div class="bubble">
+                    你好！我是 AI 助手，已接入 DeepSeek、OpenAI、通义千问。支持上传 PDF、Word、图片等文件，并基于文件内容回答。
+                </div>
+            </div>
+        </section>
+
+        <footer class="composer">
+            <div class="attachment-list" id="attachmentList"></div>
+            <textarea id="userInput" rows="3" placeholder="输入消息，Enter 发送，Shift+Enter 换行"></textarea>
+            <div class="composer-actions">
+                <div class="composer-left">
+                    <input type="file" id="fileInput" multiple hidden
+                           accept=".pdf,.doc,.docx,.txt,.md,.csv,.json,.png,.jpg,.jpeg,.gif,.webp,.bmp">
+                    <button type="button" id="uploadBtn" class="secondary-btn">上传文件</button>
+                    <span class="hint">支持 PDF / Word / 图片 等</span>
+                </div>
+                <button type="button" id="sendBtn">发送</button>
+            </div>
+        </footer>
+    </main>
+</div>
+
+<script th:inline="javascript">
+    window.CHAT_CONFIG = {
+        providers: /*[[${providers}]]*/ []
+    };
+</script>
+<script th:src="@{/js/chat.js}"></script>
+</body>
+</html>

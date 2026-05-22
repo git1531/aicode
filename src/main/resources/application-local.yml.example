@@ -1,0 +1,9 @@
+# 复制为 application-local.yml 并填入你的 API Key
+llm:
+  providers:
+    deepseek:
+      api-key: your-deepseek-api-key
+    openai:
+      api-key: your-openai-api-key
+    qwen:
+      api-key: your-qwen-api-key
