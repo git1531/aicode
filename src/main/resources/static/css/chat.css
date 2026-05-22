@@ -126,6 +126,28 @@ body {
     background: #243041;
 }
 
+.secondary-btn:disabled,
+.secondary-btn.is-disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    pointer-events: none;
+    color: #6b7785;
+    background: #121820;
+    border-color: #1f2833;
+    box-shadow: none;
+}
+
+.secondary-btn:disabled:hover,
+.secondary-btn.is-disabled:hover {
+    background: #121820;
+    color: #6b7785;
+}
+
+#uploadImageBtn:disabled,
+#uploadImageBtn.is-disabled {
+    opacity: 0.38;
+}
+
 .chat-main {
     flex: 1;
     display: flex;

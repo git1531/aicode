@@ -36,7 +36,7 @@
 
         <div class="panel panel-check" id="thinkingPanel">
             <label class="check-row">
-                <input type="checkbox" id="thinkingEnabled">
+                <input type="checkbox" id="thinkingEnabled" checked>
                 <span>开启思考模式</span>
             </label>
             <p class="panel-hint">仅 DeepSeek V4 支持，开启后会展示可折叠的思考过程</p>
@@ -67,10 +67,13 @@
             <textarea id="userInput" rows="3" placeholder="输入消息，Enter 发送，Shift+Enter 换行"></textarea>
             <div class="composer-actions">
                 <div class="composer-left">
-                    <input type="file" id="fileInput" multiple hidden
-                           accept=".pdf,.doc,.docx,.txt,.md,.csv,.json,.png,.jpg,.jpeg,.gif,.webp,.bmp">
-                    <button type="button" id="uploadBtn" class="secondary-btn">上传文件</button>
-                    <span class="hint">支持 PDF / Word / 图片 等</span>
+                    <input type="file" id="fileDocInput" multiple hidden
+                           accept=".pdf,.doc,.docx,.txt,.md,.csv,.json">
+                    <input type="file" id="fileImageInput" multiple hidden
+                           accept=".png,.jpg,.jpeg,.gif,.webp,.bmp">
+                    <button type="button" id="uploadDocBtn" class="secondary-btn">上传文档</button>
+                    <button type="button" id="uploadImageBtn" class="secondary-btn">上传图片</button>
+                    <span class="hint" id="uploadHint">文档所有模型可用；图片需 GPT-4o / Qwen-VL</span>
                 </div>
                 <button type="button" id="sendBtn">发送</button>
             </div>

@@ -43,7 +43,7 @@ public class LlmChatService {
             view.setName(config.getName());
             view.setDefaultModel(config.getDefaultModel());
             config.getModels().forEach(model -> view.getModels().add(
-                    new ProviderView.ModelOptionView(model.getId(), model.getLabel())));
+                    new ProviderView.ModelOptionView(model.getId(), model.getLabel(), model.isVision())));
             views.add(view);
         });
         return views;
@@ -86,6 +86,8 @@ public class LlmChatService {
     }
 
     private ObjectNode buildRequestBody(ChatRequest request, boolean stream) {
+        validateAttachments(request);
+
         ObjectNode body = objectMapper.createObjectNode();
         body.put("model", request.getModel());
         body.put("stream", stream);
@@ -108,7 +110,7 @@ public class LlmChatService {
                     && "user".equals(message.getRole())
                     && hasAttachments(request);
             if (lastUserWithAttachments) {
-                appendUserMessageWithAttachments(messages, message, request.getAttachments());
+                appendUserMessageWithAttachments(messages, message, request.getAttachments(), supportsVision(request));
             } else {
                 ObjectNode item = messages.addObject();
                 item.put("role", message.getRole());
@@ -133,12 +135,32 @@ public class LlmChatService {
         return request.getAttachments() != null && !request.getAttachments().isEmpty();
     }
 
-    private void appendUserMessageWithAttachments(ArrayNode messages, ChatMessage message, List<FileAttachment> attachments) {
+    private void validateAttachments(ChatRequest request) {
+        if (!hasAttachments(request)) {
+            return;
+        }
+        boolean hasImage = request.getAttachments().stream().anyMatch(att -> "image".equals(att.getFileType()));
+        if (hasImage && !supportsVision(request)) {
+            throw new IllegalArgumentException("当前模型不支持图片理解。请切换到 GPT-4o 或 Qwen-VL 等视觉模型后再上传图片。");
+        }
+    }
+
+    private boolean supportsVision(ChatRequest request) {
+        LlmProperties.ProviderConfig provider = llmProperties.getProviders().get(request.getProvider());
+        if (provider == null) {
+            return false;
+        }
+        return provider.getModels().stream()
+                .anyMatch(model -> model.getId().equals(request.getModel()) && model.isVision());
+    }
+
+    private void appendUserMessageWithAttachments(ArrayNode messages, ChatMessage message,
+                                                  List<FileAttachment> attachments, boolean visionSupported) {
         ObjectNode item = messages.addObject();
         item.put("role", "user");
 
         boolean hasImage = attachments.stream().anyMatch(att -> "image".equals(att.getFileType()));
-        if (hasImage) {
+        if (hasImage && visionSupported) {
             ArrayNode content = item.putArray("content");
             ObjectNode textPart = content.addObject();
             textPart.put("type", "text");

@@ -40,16 +40,25 @@ llm:
       models:
         - id: gpt-4o
           label: GPT-4o
+          vision: true
         - id: gpt-4o-mini
           label: GPT-4o Mini
+          vision: true
         - id: gpt-4.1
           label: GPT-4.1
+          vision: true
     qwen:
       name: 通义千问
       base-url: https://dashscope.aliyuncs.com/compatible-mode/v1
       api-key: ${QWEN_API_KEY:}
       default-model: qwen-plus
       models:
+        - id: qwen-vl-max
+          label: Qwen-VL Max
+          vision: true
+        - id: qwen-vl-plus
+          label: Qwen-VL Plus
+          vision: true
         - id: qwen-max
           label: Qwen Max
         - id: qwen-plus

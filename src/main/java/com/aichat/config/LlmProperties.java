@@ -73,6 +73,7 @@ public class LlmProperties {
 
         private String id;
         private String label;
+        private boolean vision;
 
         public String getId() {
             return id;
@@ -88,6 +89,14 @@ public class LlmProperties {
 
         public void setLabel(String label) {
             this.label = label;
+        }
+
+        public boolean isVision() {
+            return vision;
+        }
+
+        public void setVision(boolean vision) {
+            this.vision = vision;
         }
     }
 }
